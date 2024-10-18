@@ -1,4 +1,32 @@
 <?php
+    // Define constants
+    define("DATABASE_PATH","localhost:8889");
+    define("DATABASE_USERNAME","root");
+    define("DATABASE_PASSWORD","root");
+    define("DATABASE_NAME", "db_university");
+    
+    // Create connection to db
+    $conn = mysqli_connect(DATABASE_PATH, DATABASE_USERNAME, DATABASE_PASSWORD, DATABASE_NAME);
+    
+    // Check conection
+    if($conn -> connect_error){
+        die("Connection faild" . $conn->connect_errno);
+    }
+
+    // Query
+    $sql = "SELECT `students`.`name` as `FirstName`, `students`.`surname` as `LastName` FROM `students` LIMIT 10";
+    // The result
+    $response = $conn -> query($sql);
+
+    // Take the rows for every response if this exist
+    if($response && $response -> num_rows > 0){
+        $students; // Store students
+        while($dbrow = $response -> fetch_assoc()){
+            $students[] = $dbrow;
+        };
+    }
+    var_dump($students);
+    
 
 ?>
 
@@ -27,7 +55,14 @@
 <body>
     <!-- Container  -->
     <div class='container mx-auto py-4'>
-
+        <?php foreach($students as $student){ ?>
+        <h2>
+            NAME: <?= $student["FirstName"] ?>
+        </h2>
+        <h4>
+            Surname: <?= $student["LastName"] ?>
+        </h4>
+        <?php } ?>
     </div>
 </body>
 
